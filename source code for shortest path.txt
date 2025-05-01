@@ -1,0 +1,66 @@
+% Define coordinates for each node
+coords = [
+    0, -6;     % Main Gate (1)
+    -3.8, -3.7;    % Fakulti Sains dan Sumber Alam (2)
+    -8.85, -2.1;  % PPIB (3)
+    -4.9, -0.82;  % Library (4)
+    -8.3, 0.5;  % DKP Lama (5)
+    -12.1, 0.7;   % Dewan Resital (6)
+    -13.9, 1.9;     % Fakulti Perniagaan, Ekonomi dan Perakaunan (7)
+    -0.3, -0.7;     % Dewan Canselor (8)
+    2.4, -3.9;     % Fakulti Kejuruteraan (9)
+    10.1, -2;   % Kolej Kediaman Tun Mustapha (10)
+    19, -1.7;    % Kolej Kediaman Tun Fuad (11)
+    20, -1.1;    % Kolej Kediaman Tun Pengiran Ahmad Raffae (12)
+    20, -3.5;  % Padang Kawad / Kompleks Sukan (13)
+    23, -3.6;    % DKP Baru (14)
+    25, -1.3;  % Fakulti Perubatan dan Sains Kesihatan (15)
+];
+
+% Define the node pairs and their corresponding weights, including new edges
+s = [1, 1, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 8, 10, 11, 12, 12, 13, 14, 9, 7];
+t = [2, 3, 8, 9, 3, 4, 4, 5, 5, 8, 6, 7, 7, 9, 11, 12, 13, 14, 14, 15, 10, 10];
+weight = [900, 850, 650, 900, 400, 500, 450, 850, 700, 300, 260, 400, 260, 600, 900, 1200, 600, 950, 300, 900, 1000, 2300];
+
+% Create a graph object
+G = graph(s, t, weight);
+
+% Calculate the shortest path distances between all pairs of nodes
+shortestDistances = distances(G);
+
+% Display the shortest path distances matrix
+disp('Shortest Path Distances Between All Pairs of Nodes:');
+disp(shortestDistances);
+
+% Calculate and display the shortest paths and their lengths for all pairs of nodes
+for i = 1:numnodes(G)
+    for j = 1:numnodes(G)
+        if i ~= j
+            [path, pathLength] = shortestpath(G, i, j);
+            fprintf('Shortest path from node %d to node %d: %s with distance %.1f\n', i, j, mat2str(path), pathLength);
+        end
+    end
+end
+
+% Plot the graph with node coordinates
+figure;
+hold on;
+
+% Plot nodes at specified coordinates
+for i = 1:size(coords, 1)
+    plot(coords(i, 1), coords(i, 2), 'ro', 'MarkerSize', 10, 'LineWidth', 2);
+    text(coords(i, 1), coords(i, 2), sprintf(' %d', i), 'FontSize', 12);
+end
+
+% Plot edges with weights
+for i = 1:numel(s)
+    x = [coords(s(i), 1), coords(t(i), 1)];
+    y = [coords(s(i), 2), coords(t(i), 2)];
+    plot(x, y, 'b-', 'LineWidth', 2);
+    % Calculate the midpoint of the edge for labeling
+    midX = mean(x);
+    midY = mean(y);
+    text(midX, midY, sprintf(' %.1f', weight(i)), 'FontSize', 10, 'Color', 'b');
+end
+
+hold off;

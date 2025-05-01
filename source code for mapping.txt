@@ -1,0 +1,56 @@
+% Coordinates for each node 
+coords = [
+    0, -9;     % Main Gate (1)
+    -3.5, -7.6;    % Fakulti Sains dan Sumber Alam (2)
+    -8, -6.8;  % PPIB (3)
+    -4.5, -5.9;  % Library (4)
+    -8, -5.2;  % DKP Lama (5)
+    -11.1, -5;   % Dewan Resital (6)
+    -12.8, -4.3;     % Fakulti Perniagaan, Ekonomi dan Perakaunan (7)
+    -0.3, -5.7;     % Dewan Canselor (8)
+    2.2, -7.8;     % Fakulti Kejuruteraan (9)
+    9.5, -6.4;   % Kolej Kediaman Tun Mustapha (10)
+    17.5, -6.15;    % Kolej Kediaman Tun Fuad (11)
+    23, -5.5;    % Kolej Kediaman Tun Pengiran Ahmad Raffae (12)
+    22.9, -7.2;  % Padang Kawad / Kompleks Sukan (13)
+    27, -7.4;    % DKP Baru (14)
+    30, -5.5;  % Fakulti Perubatan dan Sains Kesihatan (15)
+];
+
+% Define the node pairs and their corresponding weights, including new edges
+s = [1, 1, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 8, 10, 11, 12, 12, 13, 14, 9, 7];
+t = [2, 3, 8, 9, 3, 4, 4, 5, 5, 8, 6, 7, 7, 9, 11, 12, 13, 14, 14, 15, 10, 10];
+weight = [900, 850, 650, 900, 400, 500, 450, 850, 700, 300, 260, 400, 260, 600, 900, 1200, 600, 950, 300, 900, 1000, 2300];
+
+% Create a graph object
+G = graph(s, t, weight);
+
+% Plot the graph with node coordinates
+figure;
+hold on;
+
+% Plot nodes at specified coordinates
+for i = 1:size(coords, 1)
+    plot(coords(i, 1), coords(i, 2), 'ro', 'MarkerSize', 10, 'LineWidth', 2);
+    text(coords(i, 1), coords(i, 2), sprintf(' %d', i), 'FontSize', 12);
+end
+
+% Plot edges with weights
+for i = 1:numel(s)
+    x = [coords(s(i), 1), coords(t(i), 1)];
+    y = [coords(s(i), 2), coords(t(i), 2)];
+    plot(x, y, 'b-', 'LineWidth', 2);
+    % Calculate the midpoint of the edge for labeling
+    midX = mean(x);
+    midY = mean(y);
+    text(midX, midY, sprintf(' %d', weight(i)), 'FontSize', 10, 'Color', 'b');
+end
+
+% Set fixed axis limits
+xlim([-15, 30]); % Adjust these values as needed
+ylim([-10, 0]);  % Adjust these values as needed
+
+hold off;
+
+
+
